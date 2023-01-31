@@ -30,14 +30,14 @@ namespace Infinite.AdminMVC.Controllers
                     client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                     client.BaseAddress = new System.Uri(_configuration["ApiUrl:api"]);
                     var result = await client.PostAsJsonAsync("Admin/Login", admin);
-                    if (true)
+                    if (result.IsSuccessStatusCode)
                     {
-                        //string token = await result.Content.ReadAsAsync<string>();
-                        //HttpContext.Session.SetString("token", token);
+                        string token = await result.Content.ReadAsAsync<string>();
+                        HttpContext.Session.SetString("token", token);
                         return RedirectToAction("Privacy", "Home");
                         
                     }
-                    //ModelState.AddModelError("", "Invalid Username or Password");
+                    ModelState.AddModelError("", "Invalid Username or Password");
                 }
             }
             return View(admin);
